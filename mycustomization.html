@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Carbon Footprint Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 8px;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Carbon Footprint Calculator</h1>
+
+  <form id="carbonForm">
+    <div class="section">
+      <label>Car Travel (km/week):</label>
+      <input type="number" id="carTravel" />
+    </div>
+
+    <div class="section">
+      <label>Flights per year:</label>
+      <select id="flights">
+        <option value="0">0</option>
+        <option value="1">1 short-haul</option>
+        <option value="2">1 long-haul</option>
+        <option value="3">Multiple</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <label>Electricity Usage (kWh/month):</label>
+      <input type="number" id="electricity" />
+    </div>
+
+    <div class="section">
+      <label>Diet Type:</label>
+      <select id="diet">
+        <option value="low">Plant-based</option>
+        <option value="medium">Mixed</option>
+        <option value="high">Meat-heavy</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <label>Shopping (approx. spend/month in $):</label>
+      <input type="number" id="shopping" />
+    </div>
+
+    <button type="submit">Calculate Footprint</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    document.getElementById("carbonForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const carKm = +document.getElementById("carTravel").value;
+      const flights = +document.getElementById("flights").value;
+      const electricity = +document.getElementById("electricity").value;
+      const diet = document.getElementById("diet").value;
+      const shopping = +document.getElementById("shopping").value;
+
+      // Approximate emissions factors (tonnes CO2 per year):
+      const carEmission = (carKm * 52 * 0.0002);  // 0.0002 t CO2/km
+      const flightEmission = [0, 0.5, 1.6, 3][flights]; // per option
+      const electricityEmission = electricity * 12 * 0.0005; // 0.0005 t CO2/kWh
+      const dietEmission = { low: 1.5, medium: 2.5, high: 3.3 }[diet];
+      const shoppingEmission = shopping * 12 * 0.0002; // 0.0002 t CO2/$
+
+      const total = carEmission + flightEmission + electricityEmission + dietEmission + shoppingEmission;
+
+      document.getElementById("result").innerText = `Estimated annual footprint: ${total.toFixed(2)} tonnes CO₂`;
+    });
+  </script>
+
+</body>
+</html>
